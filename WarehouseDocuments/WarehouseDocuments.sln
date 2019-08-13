@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseDocuments.Data", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseDocuments.Services", "WarehouseDocuments.Services\WarehouseDocuments.Services.csproj", "{2079F266-6051-4226-B3DE-40A59452FE1F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseDocuments.Rest.Client", "WarehouseDocuments.Rest.Client\WarehouseDocuments.Rest.Client.csproj", "{D0835309-7EAA-411D-A638-3296416C065F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{2079F266-6051-4226-B3DE-40A59452FE1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2079F266-6051-4226-B3DE-40A59452FE1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2079F266-6051-4226-B3DE-40A59452FE1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0835309-7EAA-411D-A638-3296416C065F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0835309-7EAA-411D-A638-3296416C065F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0835309-7EAA-411D-A638-3296416C065F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0835309-7EAA-411D-A638-3296416C065F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
