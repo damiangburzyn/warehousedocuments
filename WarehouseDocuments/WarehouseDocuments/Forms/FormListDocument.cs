@@ -16,12 +16,10 @@ namespace WarehouseDocuments
     public partial class FormList : Form
     {
 
-        readonly IWarehouseDocumentsService _documentService;
+        readonly IWarehouseDocumentsService _documentsService;
         public FormList()
         {
-            UnitOfWork uow = new UnitOfWork();
-            _documentService = new WarehouseDocumentsService();
-
+            _documentsService = new WarehouseDocumentsService();
             InitializeComponent();
             RefreshDataGridView();
         }
@@ -29,8 +27,17 @@ namespace WarehouseDocuments
         {
             this.WrapException(() =>
             {
-                var dataSource = _documentService.GetWarehouseDocumets();
+                var dataSource = _documentsService.GetWarehouseDocumets();
                 dataGridView1.DataSource = dataSource;
+
+                DataGridViewColumn column = dataGridView1.Columns[0];
+                column.Visible = false;
+                dataGridView1.Columns[1].HeaderText = "Data";
+                dataGridView1.Columns[2].HeaderText = "Numer klienta";
+                dataGridView1.Columns[3].HeaderText = "Nazwa";
+                dataGridView1.Columns[4].HeaderText = "Cena netto";
+                dataGridView1.Columns[5].HeaderText = "Cena brutto";
+                //dataGridView1.Columns[5].Visible = false;
 
                 // Automatically resize the visible rows.
                 dataGridView1.AutoSizeRowsMode =
@@ -42,10 +49,9 @@ namespace WarehouseDocuments
                 // Put the cells in edit mode when user enters them. 
                 dataGridView1.EditMode = DataGridViewEditMode.EditOnEnter;
             });
-
         }
 
-        private void buttonAdd_Click(object sender, EventArgs e)
+        private void ButtonAdd_Click(object sender, EventArgs e)
         {
             FormAddDocument form = new FormAddDocument(new WarehouseDocumentViewModel());
             form.VMChanged += ReloadDataSource;
@@ -53,7 +59,7 @@ namespace WarehouseDocuments
 
         }
 
-        private void buttonUpdate_Click(object sender, EventArgs e)
+        private void ButtonUpdate_Click(object sender, EventArgs e)
         {
             (this).WrapException(() =>
             {
@@ -62,7 +68,7 @@ namespace WarehouseDocuments
                 if (row != null)
                 {
                     var id = (int)row.Cells["Id"].Value;
-                    var vm = _documentService.GetWareHouseDocumentById(id);
+                    var vm = _documentsService.GetWareHouseDocumentById(id);
                     FormAddDocument form = new FormAddDocument(vm);
                     form.VMChanged += ReloadDataSource;
                     form.Show();
@@ -91,7 +97,7 @@ namespace WarehouseDocuments
             RefreshDataGridView();
         }
 
-        private void buttonDelete_Click(object sender, EventArgs e)
+        private void ButtonDelete_Click(object sender, EventArgs e)
         {
             (this).WrapException(() =>
             {
@@ -100,11 +106,33 @@ namespace WarehouseDocuments
                 if (row != null)
                 {
                     var id = (int)row.Cells["Id"].Value;
-                    _documentService.DeleteWareHouseDocument(id);
+                    _documentsService.DeleteWareHouseDocument(id);
                     MessageBox.Show("Dokument usunięty");
                     RefreshDataGridView();    
                 }
             });
+        }
+
+        private void ButtonArticleList_Click(object sender, EventArgs e)
+        {
+            (this).WrapException(() =>
+            {
+                DataGridViewRow row = FindSelectedRow();
+
+                if (row != null)
+                {
+                    var id = (int)row.Cells["Id"].Value;
+                    var vm = _documentsService.GetWareHouseDocumentById(id);
+                    var articleForm = new FormListArticle(vm);
+                    articleForm.VMChanged += ReloadDataSource;
+                    articleForm.Show();
+                }
+                else {
+
+                    MessageBox.Show("Nie wybrano danyc dokumentu");
+                }
+            });
+
         }
     }
 }

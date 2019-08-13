@@ -15,14 +15,17 @@ namespace WarehouseDocuments
 {
     public partial class FormAddDocument : Form
     {
-        private  WarehouseDocumentsService _documentService { get;  set; }
+        private IWarehouseDocumentsService _documentsService { get;  set; }
+        private IArticlesService _articlesService { get; set; }
+
 
         public delegate void VMChangedDelegate(object sender, EventArgs e);
         public event VMChangedDelegate VMChanged;
 
         public FormAddDocument()
         {           
-            _documentService = new WarehouseDocumentsService();
+            _documentsService = new WarehouseDocumentsService();
+            _articlesService = new ArticlesService();
             InitializeComponent();
             VMChanged += (x,y) => { };
         }
@@ -31,24 +34,12 @@ namespace WarehouseDocuments
         {
             _document = document;
             textBoxName.DataBindings.Add(nameof(textBoxName.Text), document, nameof(WarehouseDocumentViewModel.Name), false, DataSourceUpdateMode.OnPropertyChanged);
-            textBoxClientNo.DataBindings.Add(nameof(textBoxClientNo.Text), document, nameof(WarehouseDocumentViewModel.ClientNo), false, DataSourceUpdateMode.OnPropertyChanged);
-            numericNetPrice.DataBindings.Add(nameof(numericNetPrice.Value), document, nameof(WarehouseDocumentViewModel.NetPrice), false, DataSourceUpdateMode.OnPropertyChanged);
-            dateTimePickerDate.DataBindings.Add(nameof(dateTimePickerDate.Value), document, nameof(WarehouseDocumentViewModel.Date), false, DataSourceUpdateMode.OnPropertyChanged);
-            labelGrossPrice.DataBindings.Add(nameof(labelGrossPrice.Text), document, nameof(WarehouseDocumentViewModel.GrossPrice), false, DataSourceUpdateMode.OnPropertyChanged);
+            textBoxClientNo.DataBindings.Add(nameof(textBoxClientNo.Text), document, nameof(WarehouseDocumentViewModel.ClientNo), false, DataSourceUpdateMode.OnPropertyChanged);          
+            dateTimePickerDate.DataBindings.Add(nameof(dateTimePickerDate.Value), document, nameof(WarehouseDocumentViewModel.Date), false, DataSourceUpdateMode.OnPropertyChanged);    
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
-
-        private void buttonArticleList_Click(object sender, EventArgs e)
-        {
-            var d = _document.Name;
-
-        }
-
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void ButtonSave_Click(object sender, EventArgs e)
         {
             SaveOrUpdate();
         }
@@ -57,18 +48,15 @@ namespace WarehouseDocuments
         {
             this.WrapException(() =>
             {
-
                 if (_document.Id == 0)
                 {
-                    _documentService.SaveWarehouseDocumet(_document);
+                    _documentsService.SaveWarehouseDocumet(_document);
                 }
-
                 else {
-                    _documentService.UpdateWarehouseDocumet(_document);
+                    _documentsService.UpdateWarehouseDocumet(_document);
                 }
                 VMChanged(this, new EventArgs());
                 this.Close();
-
             });
         }
     }

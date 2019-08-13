@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -22,17 +23,19 @@ namespace WarehouseDocuments.Data
         public virtual IEnumerable<TEntity> List(
            Expression<Func<TEntity, bool>> filter = null,
            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-           string includeProperties = "")
+           IEnumerable<string> includes = null )
         {
             IQueryable<TEntity> query = dbSet;
             if (filter != null)
             {
                 query = query.Where(filter);
             }
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            if (includes != null)
             {
-                query = query.Include(includeProperty);
+                foreach (var item in includes)
+                {
+                  query = query.Include(item);
+                }
             }
             if (orderBy != null)
             {
@@ -43,14 +46,23 @@ namespace WarehouseDocuments.Data
                 return query.ToList();
             }
         }
-        public virtual TEntity Get(Expression<Func<TEntity, bool>> filter)
+        public virtual TEntity Get(Expression<Func<TEntity, bool>> filter, IEnumerable<string> includes = null)
         {
+            DbQuery<TEntity> query = dbSet;
+            if (includes != null)
+            {
+                foreach (var item in includes)
+                {
+                  query = query.Include(item);
+                }
+            }
+
             return dbSet.FirstOrDefault(filter);
         }
         public virtual int Insert(TEntity entity)
         {
-            dbSet.Add(entity);
-            return entity.Id;
+            var res = dbSet.Add(entity);
+            return res.Id;
         }
         public virtual void Delete(object id)
         {

@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="ArticleViewModel.cs" />
     <Compile Include="FormExtentions.cs" />
+    <Compile Include="IArticlesService.cs" />
     <Compile Include="IWarehouseDocumentsService.cs" />
     <Compile Include="WarehouseDocumentViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

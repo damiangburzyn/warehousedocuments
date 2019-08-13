@@ -16,6 +16,7 @@ namespace WarehouseDocuments.Data
         public WarehouseDocumetDbContext()
             : base("name=WarehouseDocumetDbContext")
         {
+          //  Database.SetInitializer<WarehouseDocumetDbContext>(new DropCreateDatabaseIfModelChanges<WarehouseDocumetDbContext>( ));           
         }
 
         public virtual DbSet<Article> Articles { get; set; }

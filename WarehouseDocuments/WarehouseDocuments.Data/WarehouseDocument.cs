@@ -17,8 +17,7 @@ namespace WarehouseDocuments.Data
         public DateTime Date { get; set; }
         public string ClientNo { get; set; }
         public string Name { get; set; }
-        public decimal NetPrice { get; set; }
-        public decimal GrossPrice { get; set; }
+       
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
         public virtual List <Article> Articles { get; set; }

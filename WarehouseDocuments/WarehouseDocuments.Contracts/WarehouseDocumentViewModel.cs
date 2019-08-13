@@ -17,7 +17,7 @@ namespace WarehouseDocuments.Contracts
         public decimal NetPrice { get; set; }
         public decimal GrossPrice => decimal.Round( NetPrice * 1.23m , 2, MidpointRounding.AwayFromZero) ;
 
-        public virtual List <ArticleViewModel> Articles { get; set; }
+        public virtual List<ArticleViewModel> Articles { get; set; } = new List<ArticleViewModel>();
 
         public event PropertyChangedEventHandler PropertyChanged;
 

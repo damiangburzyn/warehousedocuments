@@ -17,8 +17,9 @@ namespace WarehouseDocuments.Services
         {
             var config = new MapperConfiguration(cfg =>
             {
-
-                cfg.CreateMap<WarehouseDocumentViewModel, WarehouseDocument>().ReverseMap();
+                cfg.CreateMap<WarehouseDocumentViewModel, WarehouseDocument>().ReverseMap()
+                .ForMember(a => a.NetPrice, opt => opt.MapFrom(a => a.Articles.Sum(b=>b.Count * b.NetPrice)))
+                .ForMember(a => a.GrossPrice, opt => opt.MapFrom(a => decimal.Round(a.Articles.Sum(b => b.Count * b.NetPrice) * 1.23m, 2, MidpointRounding.AwayFromZero)));
                 cfg.CreateMap<ArticleViewModel, Article>().ReverseMap();
             });
             this._mapper = config.CreateMapper();
@@ -28,7 +29,8 @@ namespace WarehouseDocuments.Services
         {
             using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                var data = unitOfWork.WarehouseDocumentRepository.List();
+                var includes = new List<string>() { nameof(WarehouseDocumentViewModel.Articles) };
+                var data = unitOfWork.WarehouseDocumentRepository.List(null, null,includes);
                 return _mapper.Map<IEnumerable<WarehouseDocumentViewModel>>(data);
             }          
         }
@@ -60,11 +62,13 @@ namespace WarehouseDocuments.Services
         {
             using (UnitOfWork unitOfWork = new UnitOfWork())
             {
-                var data = unitOfWork.WarehouseDocumentRepository.Get(x => x.Id == id);
+                var includes = new List<string>() { nameof(WarehouseDocumentViewModel.Articles) };
+                var data = unitOfWork.WarehouseDocumentRepository.Get(x => x.Id == id, includes);
                 var vm = _mapper.Map<WarehouseDocumentViewModel>(data);
                 return vm;
             }
         }
+
 
         public void DeleteWareHouseDocument(int id)
         {

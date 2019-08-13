@@ -26,9 +26,7 @@ namespace System
             }
         }
 
-
         public static void WrapException(this Form form, Action func)
-
         {
             try
             {

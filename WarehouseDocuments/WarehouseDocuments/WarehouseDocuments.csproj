@@ -65,36 +65,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormAddDocument.cs">
+    <Compile Include="Forms\FormAddDocument.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAddDocument.Designer.cs">
+    <Compile Include="Forms\FormAddDocument.Designer.cs">
       <DependentUpon>FormAddDocument.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAddArticle.cs">
+    <Compile Include="Forms\FormAddArticle.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAddArticle.Designer.cs">
+    <Compile Include="Forms\FormAddArticle.Designer.cs">
       <DependentUpon>FormAddArticle.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormListArticle.cs">
+    <Compile Include="Forms\FormListArticle.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormListArticle.Designer.cs">
+    <Compile Include="Forms\FormListArticle.Designer.cs">
       <DependentUpon>FormListArticle.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormListDocument.cs">
+    <Compile Include="Forms\FormListDocument.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormListDocument.Designer.cs">
+    <Compile Include="Forms\FormListDocument.Designer.cs">
       <DependentUpon>FormListDocument.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormAddDocument.resx">
+    <EmbeddedResource Include="Forms\FormAddArticle.resx">
+      <DependentUpon>FormAddArticle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAddDocument.resx">
       <DependentUpon>FormAddDocument.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormListDocument.resx">
+    <EmbeddedResource Include="Forms\FormListArticle.resx">
+      <DependentUpon>FormListArticle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormListDocument.resx">
       <DependentUpon>FormListDocument.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -106,6 +112,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
