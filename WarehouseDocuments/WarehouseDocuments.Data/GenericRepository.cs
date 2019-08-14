@@ -20,7 +20,7 @@ namespace WarehouseDocuments.Data
             this.dbSet = db.Set<TEntity>();
         }
 
-        public virtual IEnumerable<TEntity> List(
+        public virtual async  Task<IEnumerable<TEntity>> List(
            Expression<Func<TEntity, bool>> filter = null,
            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
            IEnumerable<string> includes = null )
@@ -39,14 +39,14 @@ namespace WarehouseDocuments.Data
             }
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return await orderBy(query).ToListAsync();
             }
             else
             {
-                return query.ToList();
+                return await query.ToListAsync();
             }
         }
-        public virtual TEntity Get(Expression<Func<TEntity, bool>> filter, IEnumerable<string> includes = null)
+        public async Task <TEntity> Get(Expression<Func<TEntity, bool>> filter, IEnumerable<string> includes = null)
         {
             DbQuery<TEntity> query = dbSet;
             if (includes != null)
@@ -57,7 +57,7 @@ namespace WarehouseDocuments.Data
                 }
             }
 
-            return dbSet.FirstOrDefault(filter);
+            return  await dbSet.FirstOrDefaultAsync(filter);
         }
         public virtual int Insert(TEntity entity)
         {

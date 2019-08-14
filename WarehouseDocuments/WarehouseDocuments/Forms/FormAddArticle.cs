@@ -14,7 +14,7 @@ namespace WarehouseDocuments
 {
     public partial class FormAddArticle : Form
     {
-        public delegate void VMChangedDelegate(object sender, EventArgs e);
+        public delegate Task VMChangedDelegate(object sender, EventArgs e);
         public event VMChangedDelegate VMChanged;
         public IArticlesService _articlesService { get; }
 
@@ -26,7 +26,7 @@ namespace WarehouseDocuments
         {
             InitializeComponent();
             _articlesService = new ArticlesService();
-            VMChanged += (x, y) => { };
+            //VMChanged += async (x, y) =>  { };
         }
 
         public FormAddArticle(ArticleViewModel article, WarehouseDocumentViewModel document) : this()
@@ -39,14 +39,14 @@ namespace WarehouseDocuments
             labelGrossPrice.DataBindings.Add(nameof(labelGrossPrice.Text), article, nameof(ArticleViewModel.GrossPrice), false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
-        private void ButtonSave_Click(object sender, EventArgs e)
+        private async void ButtonSave_Click(object sender, EventArgs e)
         {
-            SaveOrUpdate();
+          await   SaveOrUpdate();
         }
 
-        private void SaveOrUpdate()
+        private async Task SaveOrUpdate()
         {
-            this.WrapException(() =>
+           await this.WrapException(async () =>
             {
 
                 if (_article.Id == 0)
@@ -54,8 +54,8 @@ namespace WarehouseDocuments
                     if (_document.Id != 0)
                     {
                         _article.WarehouseDocumentId = _document.Id;
-                        _articlesService.SaveArticle(_article);
-                        VMChanged(this, new EventArgs());
+                       await _articlesService.SaveArticle(_article);
+                       await VMChanged(this, new EventArgs());
                     }
                     else
                     {
@@ -64,8 +64,8 @@ namespace WarehouseDocuments
                 }
                 else
                 {
-                    _articlesService.UpdateArticle(_article);
-                    VMChanged(this, new EventArgs());
+                    await _articlesService.UpdateArticle(_article);
+                    await VMChanged(this, new EventArgs());
                 }
                 this.Close();
             });

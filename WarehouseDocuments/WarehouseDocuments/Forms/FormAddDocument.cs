@@ -19,7 +19,7 @@ namespace WarehouseDocuments
         private IArticlesService _articlesService { get; set; }
 
 
-        public delegate void VMChangedDelegate(object sender, EventArgs e);
+        public delegate Task VMChangedDelegate(object sender, EventArgs e);
         public event VMChangedDelegate VMChanged;
 
         public FormAddDocument()
@@ -27,7 +27,7 @@ namespace WarehouseDocuments
             _documentsService = new WarehouseDocumentsService();
             _articlesService = new ArticlesService();
             InitializeComponent();
-            VMChanged += (x,y) => { };
+           // VMChanged += (x,y) => { };
         }
 
         public FormAddDocument(WarehouseDocumentViewModel document) : this()
@@ -39,23 +39,23 @@ namespace WarehouseDocuments
         }
 
 
-        private void ButtonSave_Click(object sender, EventArgs e)
+        private async void ButtonSave_Click(object sender, EventArgs e)
         {
-            SaveOrUpdate();
+         await    SaveOrUpdate();
         }
 
-        private void SaveOrUpdate()
+        private async Task SaveOrUpdate()
         {
-            this.WrapException(() =>
+            await this.WrapException(async () =>
             {
                 if (_document.Id == 0)
                 {
-                    _documentsService.SaveWarehouseDocumet(_document);
+                    await _documentsService.SaveWarehouseDocumet(_document);
                 }
                 else {
-                    _documentsService.UpdateWarehouseDocumet(_document);
+                   await  _documentsService.UpdateWarehouseDocumet(_document);
                 }
-                VMChanged(this, new EventArgs());
+               await  VMChanged(this, new EventArgs());
                 this.Close();
             });
         }

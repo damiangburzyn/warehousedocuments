@@ -49,6 +49,12 @@ namespace WarehouseDocuments.Data
         {
             db.SaveChanges();
         }
+
+        public async Task SaveChangesAsync()
+        {
+           await  db.SaveChangesAsync();
+        }
+
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
         {

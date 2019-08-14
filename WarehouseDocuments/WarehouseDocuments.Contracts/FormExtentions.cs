@@ -26,7 +26,23 @@ namespace System
             }
         }
 
-        public static void WrapException(this Form form, Action func)
+
+        public static async Task<T> WrapExceptionAsync<T>(Func<Task<T>> func)
+        {
+            try
+            {
+                return await func();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Wystąpił błąd");
+                _logger.Error("Podczas operacji wystąpił błąd", ex);
+                return default(T);
+            }
+        }
+
+
+        public static  void WrapException(this Form form, Action func)
         {
             try
             {
@@ -39,6 +55,7 @@ namespace System
                 
             }
         }
+
 
     }
 }

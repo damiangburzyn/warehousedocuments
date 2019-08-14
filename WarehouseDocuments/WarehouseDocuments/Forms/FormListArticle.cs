@@ -14,7 +14,7 @@ namespace WarehouseDocuments
 {
     public partial class FormListArticle : Form
     {
-        public delegate void VMChangedDelegate(object sender, EventArgs e);
+        public delegate Task VMChangedDelegate(object sender, EventArgs e);
         public event VMChangedDelegate VMChanged;
 
         private WarehouseDocumentViewModel _wareHouseDocument { get; set; }
@@ -23,7 +23,7 @@ namespace WarehouseDocuments
         public FormListArticle()
         {
             InitializeComponent();
-            VMChanged += (x, y) => { };
+            //VMChanged += (x, y) => { };
         }
 
         public FormListArticle(WarehouseDocumentViewModel wareHouseDocument):this()
@@ -33,11 +33,11 @@ namespace WarehouseDocuments
             RefreshDataGridView();
         }
 
-        private void RefreshDataGridView()
+        private async Task RefreshDataGridView()
         {
-            this.WrapException(() =>
+           await this.WrapException(async () =>
             {
-                var dataSource = _articlesService.GetDocumentArticles(_wareHouseDocument.Id);
+                var dataSource = await _articlesService.GetDocumentArticles(_wareHouseDocument.Id);
                 dataGridView1.DataSource = dataSource;
                 DataGridViewColumn column = dataGridView1.Columns[0];
                 column.Visible= false;
@@ -67,35 +67,35 @@ namespace WarehouseDocuments
 
         }
 
-        private void ButtonUpdate_Click(object sender, EventArgs e)
+        private async void ButtonUpdate_Click(object sender, EventArgs e)
         {
-            (this).WrapException(() =>
+            await (this).WrapException(async() =>
             {
                 DataGridViewRow row = FindSelectedRow();
 
                 if (row != null)
                 {
                     var id = (int)row.Cells["Id"].Value;
-                    var vm = _articlesService.GetArticleById(id);
+                    var vm = await _articlesService.GetArticleById(id);
                     FormAddArticle form = new FormAddArticle(vm, _wareHouseDocument);
-                    form.VMChanged += ReloadDataSource;
+                    form.VMChanged +=  ReloadDataSource;
                     form.Show();
                 }
             });
         }
 
-        private void ButtonDelete_Click(object sender, EventArgs e)
+        private async void ButtonDelete_Click(object sender, EventArgs e)
         {
-            (this).WrapException(() =>
+           await (this).WrapException( async () =>
             {
                 DataGridViewRow row = FindSelectedRow();
 
                 if (row != null)
                 {
                     var id = (int)row.Cells["Id"].Value;
-                    _articlesService.DeleteArticle(id);
+                    await _articlesService.DeleteArticle(id);
                     MessageBox.Show("Artykuł usunięty");
-                    RefreshDataGridView();
+                   await RefreshDataGridView();
                 }
             });
         }
@@ -116,10 +116,10 @@ namespace WarehouseDocuments
             return row;
         }
 
-        public void ReloadDataSource(object sender, EventArgs e)
+        public async Task ReloadDataSource(object sender, EventArgs e)
         {
-            RefreshDataGridView();
-            this.VMChanged(this, new EventArgs());
+            await RefreshDataGridView();
+            await this.VMChanged(this, new EventArgs());
         }
 
     }

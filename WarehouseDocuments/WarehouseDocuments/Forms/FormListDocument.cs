@@ -23,11 +23,11 @@ namespace WarehouseDocuments
             InitializeComponent();
             RefreshDataGridView();
         }
-        private void RefreshDataGridView()
+        private async Task RefreshDataGridView()
         {
-            this.WrapException(() =>
+            await this.WrapException(async () =>
             {
-                var dataSource = _documentsService.GetWarehouseDocumets();
+                var dataSource = await _documentsService.GetWarehouseDocumets();
                 dataGridView1.DataSource = dataSource;
 
                 DataGridViewColumn column = dataGridView1.Columns[0];
@@ -59,16 +59,16 @@ namespace WarehouseDocuments
 
         }
 
-        private void ButtonUpdate_Click(object sender, EventArgs e)
+        private async void ButtonUpdate_Click(object sender, EventArgs e)
         {
-            (this).WrapException(() =>
+         await   (this).WrapException(async () =>
             {
                 DataGridViewRow row = FindSelectedRow();
 
                 if (row != null)
                 {
                     var id = (int)row.Cells["Id"].Value;
-                    var vm = _documentsService.GetWareHouseDocumentById(id);
+                    var vm = await _documentsService.GetWareHouseDocumentById(id);
                     FormAddDocument form = new FormAddDocument(vm);
                     form.VMChanged += ReloadDataSource;
                     form.Show();
@@ -92,39 +92,39 @@ namespace WarehouseDocuments
             return row;
         }
 
-        public void ReloadDataSource(object sender, EventArgs e)
+        public async Task ReloadDataSource(object sender, EventArgs e)
         {
-            RefreshDataGridView();
+            await RefreshDataGridView();
         }
 
-        private void ButtonDelete_Click(object sender, EventArgs e)
+        private async void ButtonDelete_Click(object sender, EventArgs e)
         {
-            (this).WrapException(() =>
+          await  (this).WrapException(async () =>
             {
                 DataGridViewRow row = FindSelectedRow();
 
                 if (row != null)
                 {
                     var id = (int)row.Cells["Id"].Value;
-                    _documentsService.DeleteWareHouseDocument(id);
+                    await _documentsService.DeleteWareHouseDocument(id);
                     MessageBox.Show("Dokument usunięty");
-                    RefreshDataGridView();    
+                    await RefreshDataGridView();    
                 }
             });
         }
 
-        private void ButtonArticleList_Click(object sender, EventArgs e)
+        private async void ButtonArticleList_Click(object sender, EventArgs e)
         {
-            (this).WrapException(() =>
+          await  (this).WrapException(async () =>
             {
                 DataGridViewRow row = FindSelectedRow();
 
                 if (row != null)
                 {
                     var id = (int)row.Cells["Id"].Value;
-                    var vm = _documentsService.GetWareHouseDocumentById(id);
+                    var vm = await _documentsService.GetWareHouseDocumentById(id);
                     var articleForm = new FormListArticle(vm);
-                    articleForm.VMChanged += ReloadDataSource;
+                    articleForm.VMChanged +=  ReloadDataSource;
                     articleForm.Show();
                 }
                 else {

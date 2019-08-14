@@ -8,10 +8,10 @@ namespace WarehouseDocuments.Contracts
 {
     public interface IWarehouseDocumentsService
     {
-        IEnumerable<WarehouseDocumentViewModel> GetWarehouseDocumets();
-        WarehouseDocumentViewModel GetWareHouseDocumentById(int id);
-        void UpdateWarehouseDocumet(WarehouseDocumentViewModel vm);
-        int SaveWarehouseDocumet(WarehouseDocumentViewModel vm);
-        void DeleteWareHouseDocument(int id);
+        Task<IEnumerable<WarehouseDocumentViewModel>> GetWarehouseDocumets();
+        Task <WarehouseDocumentViewModel> GetWareHouseDocumentById(int id);
+        Task UpdateWarehouseDocumet(WarehouseDocumentViewModel vm);
+        Task<int> SaveWarehouseDocumet(WarehouseDocumentViewModel vm);
+        Task DeleteWareHouseDocument(int id);
     }
 }
