@@ -129,7 +129,7 @@ namespace WarehouseDocuments
                 }
                 else {
 
-                    MessageBox.Show("Nie wybrano danyc dokumentu");
+                    MessageBox.Show("Nie wybrano danych dokumentu");
                 }
             });
 
