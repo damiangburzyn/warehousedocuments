@@ -24,14 +24,14 @@ namespace WarehouseDocuments
 
         public FormAddDocument()
         {           
-            _documentsService = new WarehouseDocumentsService();
-            _articlesService = new ArticlesService();
             InitializeComponent();
            // VMChanged += (x,y) => { };
         }
 
-        public FormAddDocument(WarehouseDocumentViewModel document) : this()
+        public FormAddDocument(WarehouseDocumentViewModel document, IWarehouseDocumentsService documentsService, IArticlesService articlesService) : this()
         {
+            _documentsService = documentsService;
+            _articlesService = articlesService;
             _document = document;
             textBoxName.DataBindings.Add(nameof(textBoxName.Text), document, nameof(WarehouseDocumentViewModel.Name), false, DataSourceUpdateMode.OnPropertyChanged);
             textBoxClientNo.DataBindings.Add(nameof(textBoxClientNo.Text), document, nameof(WarehouseDocumentViewModel.ClientNo), false, DataSourceUpdateMode.OnPropertyChanged);          

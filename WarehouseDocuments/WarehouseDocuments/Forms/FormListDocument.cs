@@ -13,13 +13,15 @@ using WarehouseDocuments.Services;
 
 namespace WarehouseDocuments
 {
-    public partial class FormList : Form
+    public partial class FormListDocument : Form
     {
 
         readonly IWarehouseDocumentsService _documentsService;
-        public FormList()
+        readonly IArticlesService _articlesService;
+        public FormListDocument(IWarehouseDocumentsService documentsService, IArticlesService articlesService)
         {
-            _documentsService = new WarehouseDocumentsService();
+            _documentsService = documentsService;
+            _articlesService = articlesService;
             InitializeComponent();
             RefreshDataGridView();
         }
@@ -53,10 +55,9 @@ namespace WarehouseDocuments
 
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
-            FormAddDocument form = new FormAddDocument(new WarehouseDocumentViewModel());
+            FormAddDocument form = new FormAddDocument(new WarehouseDocumentViewModel(), _documentsService, _articlesService);
             form.VMChanged += ReloadDataSource;
             form.Show();
-
         }
 
         private async void ButtonUpdate_Click(object sender, EventArgs e)
@@ -69,7 +70,7 @@ namespace WarehouseDocuments
                 {
                     var id = (int)row.Cells["Id"].Value;
                     var vm = await _documentsService.GetWareHouseDocumentById(id);
-                    FormAddDocument form = new FormAddDocument(vm);
+                    FormAddDocument form = new FormAddDocument(vm, _documentsService, _articlesService);
                     form.VMChanged += ReloadDataSource;
                     form.Show();
                 }
@@ -88,7 +89,6 @@ namespace WarehouseDocuments
                 var cell = this.dataGridView1.SelectedCells[0];
                 row = dataGridView1.Rows[cell.RowIndex];
             }
-
             return row;
         }
 
@@ -102,7 +102,6 @@ namespace WarehouseDocuments
           await  (this).WrapException(async () =>
             {
                 DataGridViewRow row = FindSelectedRow();
-
                 if (row != null)
                 {
                     var id = (int)row.Cells["Id"].Value;
@@ -123,7 +122,7 @@ namespace WarehouseDocuments
                 {
                     var id = (int)row.Cells["Id"].Value;
                     var vm = await _documentsService.GetWareHouseDocumentById(id);
-                    var articleForm = new FormListArticle(vm);
+                    var articleForm = new FormListArticle(vm, _articlesService);
                     articleForm.VMChanged +=  ReloadDataSource;
                     articleForm.Show();
                 }

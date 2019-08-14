@@ -1,6 +1,6 @@
 ﻿namespace WarehouseDocuments
 {
-    partial class FormList
+    partial class FormListDocument
     {
         /// <summary>
         /// Required designer variable.

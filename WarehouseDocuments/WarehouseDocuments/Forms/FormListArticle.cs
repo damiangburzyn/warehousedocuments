@@ -26,10 +26,10 @@ namespace WarehouseDocuments
             //VMChanged += (x, y) => { };
         }
 
-        public FormListArticle(WarehouseDocumentViewModel wareHouseDocument):this()
+        public FormListArticle(WarehouseDocumentViewModel wareHouseDocument, IArticlesService articlesService) :this()
         {
             _wareHouseDocument = wareHouseDocument;
-            _articlesService = new ArticlesService();
+            _articlesService = articlesService;
             RefreshDataGridView();
         }
 
@@ -61,7 +61,7 @@ namespace WarehouseDocuments
 
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
-            FormAddArticle form = new FormAddArticle(new ArticleViewModel() { WarehouseDocumentId = _wareHouseDocument.Id }, _wareHouseDocument);
+            FormAddArticle form = new FormAddArticle(new ArticleViewModel() { WarehouseDocumentId = _wareHouseDocument.Id }, _articlesService);
             form.VMChanged += ReloadDataSource;
             form.Show();
 
@@ -77,7 +77,7 @@ namespace WarehouseDocuments
                 {
                     var id = (int)row.Cells["Id"].Value;
                     var vm = await _articlesService.GetArticleById(id);
-                    FormAddArticle form = new FormAddArticle(vm, _wareHouseDocument);
+                    FormAddArticle form = new FormAddArticle(vm, _articlesService);
                     form.VMChanged +=  ReloadDataSource;
                     form.Show();
                 }
@@ -96,6 +96,7 @@ namespace WarehouseDocuments
                     await _articlesService.DeleteArticle(id);
                     MessageBox.Show("Artykuł usunięty");
                    await RefreshDataGridView();
+                   await this.VMChanged(this, new EventArgs());
                 }
             });
         }
